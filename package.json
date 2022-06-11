@@ -1,0 +1,17 @@
+{
+  "name": "lechanger",
+  "version": "1.0.0",
+  "description": "Lecharger app",
+  "author": "Michal Szabo <michal.szabo@email.cz>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd frontend && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalszabo/lechanger.git"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1"
+  }
+}

@@ -50,7 +50,7 @@ const Home: NextPage = () => (
         target="_blank"
         rel="noopener noreferrer"
       >
-        &copy;Michal Szabo
+        &copy;2022 Michal Szabo
       </a>
     </footer>
   </div>

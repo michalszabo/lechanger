@@ -9,7 +9,8 @@
     "url": "git+https://github.com/michalszabo/lechanger.git"
   },
   "scripts": {
-    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd frontend && npm run dev\""
+    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {

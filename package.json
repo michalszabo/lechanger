@@ -4,14 +4,20 @@
   "description": "Lecharger app",
   "author": "Michal Szabo <michal.szabo@email.cz>",
   "license": "MIT",
-  "scripts": {
-    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd frontend && npm run dev\""
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/michalszabo/lechanger.git"
   },
+  "scripts": {
+    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd frontend && npm run dev\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "cd ./frontend && npm run lint && cd ../backend && npm run lint"
+    }
+  },
   "devDependencies": {
-    "concurrently": "^7.2.1"
+    "concurrently": "^7.2.1",
+    "husky": "^8.0.1"
   }
 }

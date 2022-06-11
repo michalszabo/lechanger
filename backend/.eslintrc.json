@@ -1,0 +1,8 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": ["eslint:recommended", "airbnb/base", "prettier"],
+
+  "rules": {
+    "no-console": "off"
+  }
+}

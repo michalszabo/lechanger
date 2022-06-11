@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "0.1.0",
-  "description": "Express.js app of the lechanger",
+  "description": "Express.js app of the Léchanger",
   "author": "Michal Szabo <michal.szabo@email.cz>",
   "main": "index.js",
   "scripts": {

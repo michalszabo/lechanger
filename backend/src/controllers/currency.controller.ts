@@ -71,7 +71,7 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
     // Exchange to USD for later storage (zero check with express-validator)
     if (!usdAmount) {
       const usdResponse = await axios.get(
-        `${EXCHANGE_API_URL}?amount=${amount}&from=${originalCurrency}&to=${USD_CURRENCY_KEY}ddd`
+        `${EXCHANGE_API_URL}?amount=${amount}&from=${originalCurrency}&to=${USD_CURRENCY_KEY}`
       );
 
       const { success, result } = usdResponse.data as ApiExchangeDataType;

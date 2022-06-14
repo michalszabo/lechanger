@@ -9,5 +9,13 @@
   "trailingComma": "none",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "semi": true
+  "semi": true,
+  "overrides": [
+    {
+      "files": ["shared-types.ts"],
+      "options": {
+        "printWidth": 100
+      }
+    }
+  ]
 }

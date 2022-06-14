@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
+    "paths": { "@types": ["../shared-types.ts"] },
     "target": "es5",
     "module": "commonjs",
     "lib": ["es6"],
     "allowJs": true,
     "outDir": "dist",
-    "rootDir": "src",
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,

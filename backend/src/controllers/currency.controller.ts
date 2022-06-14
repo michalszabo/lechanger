@@ -58,33 +58,6 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
   const { amount, originalCurrency, destinationCurrency } = req.body;
   const USD_CURRENCY_KEY = "USD";
 
-  /**
-   * Check if currency keys are the same and in that case,
-   * do not call external api and just format the response.
-   *
-   * This case will be treated on FE, so do not store the result into database.
-   * This is just in case some external app will call this route with equal currency types.
-   */
-  if (originalCurrency === destinationCurrency) {
-    const responseData: ApiSuccessType<ApiExchangeSuccessDataType> = {
-      success: true,
-      data: {
-        query: {
-          from: originalCurrency,
-          to: originalCurrency,
-          amount
-        },
-        info: {
-          rate: 1
-        },
-        result: amount
-      }
-    };
-
-    res.status(200).json(responseData);
-    return;
-  }
-
   // https://exchangerate.host/#/#our-services
   const EXCHANGE_API_URL = "https://api.exchangerate.host/convert";
 

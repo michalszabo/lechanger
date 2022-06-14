@@ -28,7 +28,11 @@ router.post(
       .withMessage((_, { path }) => `'${path}' must be a string`)
       .bail()
       .isLength({ min: 3, max: 3 })
-      .withMessage((_, { path }) => `'${path}' must be 3-letter code`)
+      .withMessage((_, { path }) => `'${path}' must be 3-letter code`),
+    // Check for equal currencies
+    check("originalCurrency")
+      .custom((value, { req }) => value !== req.body.destinationCurrency)
+      .withMessage("Don't try to compare equal currency types please :)")
   ],
   currencyController.exchange
 );

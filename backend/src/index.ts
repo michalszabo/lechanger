@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { notFound, errorHandler } from "./handlers";
 import connectDb from "./services/db.service";
 import CurrencyRoute from "./routes/currency";
+import StatsRoute from "./routes/stats";
 
 // Development env config
 if (process.env.NODE_ENV === "development") {
@@ -24,6 +25,7 @@ connectDb();
 
 // Routes
 app.use("/api/currency/", CurrencyRoute);
+app.use("/api/stats/", StatsRoute);
 
 // 404 handler
 app.use(notFound);

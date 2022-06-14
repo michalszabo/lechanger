@@ -3,7 +3,7 @@ import express from "express";
 import type { Express } from "express";
 import dotenv from "dotenv";
 
-import notFound from "./handlers/notFound";
+import { notFound, errorHandler } from "./handlers";
 import connectDb from "./services/db.service";
 import CurrencyRoute from "./routes/currency";
 
@@ -27,6 +27,8 @@ app.use("/api/currency/", CurrencyRoute);
 
 // 404 handler
 app.use(notFound);
+// Error handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

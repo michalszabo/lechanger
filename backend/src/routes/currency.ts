@@ -17,9 +17,9 @@ router.post(
       .exists()
       .withMessage("Exchange request must contain 'amount'")
       .bail()
-      .isNumeric()
-      .withMessage("'amount' must be a number"),
-    // Check for "originalCurrency" and "originalCurrency"
+      .isFloat({ min: 0 })
+      .withMessage("'amount' must be a number greater than zero"),
+    // Check for "originalCurrency" and "destinationCurrency"
     check(["originalCurrency", "destinationCurrency"])
       .exists()
       .withMessage((_, { path }) => `Exchange request must contain '${path}'`)

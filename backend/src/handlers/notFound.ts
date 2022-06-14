@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 const notFound = (req: Request, res: Response) => {
   const error: Error = new Error(`Not Found - ${req.originalUrl}`);

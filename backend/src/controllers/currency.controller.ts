@@ -93,6 +93,10 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
       response.data as ApiExchangeDataType;
 
     if (!success) throw Error("Exchange failed on external API");
+    if (!result)
+      throw Error(
+        "Exchange failed on external API - check if valid currency were used"
+      );
 
     const responseData: ApiSuccessType<ApiExchangeSuccessDataType> = {
       success: true,
@@ -115,7 +119,7 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     const errorResponse: ApiErrorType = {
       success: false,
-      message: typeof error === "string" ? error : null,
+      message: typeof error === "object" ? (error as any).toString() : null,
       errors:
         ((error as { [key: string]: unknown })?.errors as ApiDBErrorType) ??
         (error as ApiErrorItemType[])

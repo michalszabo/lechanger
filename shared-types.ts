@@ -30,3 +30,14 @@ export interface ApiSuccessType<TData = unknown> extends DefaultApiResponseType 
 }
 
 export type ApiExchangeSuccessDataType = Pick<ApiExchangeDataType, "query" | "info" | "result">;
+
+export interface ApiTopDestinationCurrencyType {
+  _id: string;
+  count: number;
+}
+
+export interface ApiStatsDataType {
+  topDestinationCurrency: ApiTopDestinationCurrencyType;
+  totalAmountConvertedUSD: number;
+  conversionsLength: number;
+}

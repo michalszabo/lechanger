@@ -3,6 +3,8 @@ node_modules
 # Production and development ENV config files
 .env
 .env.dev
+.env.local
+.env.production
 
 # Dist folder
 dist/

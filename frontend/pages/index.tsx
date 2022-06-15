@@ -1,59 +1,92 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
+import { Box, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
+import { GiReceiveMoney } from "@react-icons/all-files/gi/GiReceiveMoney";
+import { IoMdStats } from "@react-icons/all-files/io/IoMdStats";
 
-const Home: NextPage = () => (
-  <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-    <Head>
-      <title>l&apos;échanger</title>
-      <meta name="description" content="Currency conversion web app" />
-      {/* <link rel="icon" href="/favicon.ico" /> */}
-    </Head>
+import type { CSSObject } from "@chakra-ui/react";
+import type { ApiStatsDataType } from "@types";
 
-    <header style={{ textAlign: "center", padding: "1rem 0" }}>
-      <h1>
-        Welcome to <strong>l&apos;échanger</strong>
-      </h1>
-    </header>
+const tabSelectedStyle: CSSObject = {
+  color: "white",
+  bg: "transparent"
+};
 
-    <main
-      style={{
-        padding: "1rem 0",
-        flex: 1,
-        backgroundColor: "#51395f",
-        color: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "3rem"
-      }}
+interface PageProps {
+  availableCurrencies: {
+    short: string[];
+    long: string[];
+  };
+  stats: ApiStatsDataType;
+}
+
+const Home: NextPage<PageProps> = () => (
+  <>
+    <Head>{/* <link rel="icon" href="/favicon.ico" /> */}</Head>
+
+    <Tabs
+      isFitted
+      variant="unstyled"
+      size="lg"
+      borderRadius="1.25rem"
+      overflow="hidden"
+      bgGradient="linear(to-br, purple.600, purple.700)"
     >
-      {Array(10)
-        .fill("")
-        .map((_, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <div key={index}>#content</div>
-        ))}
-    </main>
+      <TabList>
+        <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
+          <GiReceiveMoney />
+          <Box as="span" ml={2}>
+            Convert
+          </Box>
+        </Tab>
+        <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
+          <IoMdStats />
+          <Box as="span" ml={2}>
+            Stats
+          </Box>
+        </Tab>
+      </TabList>
 
-    <footer
-      style={{
-        padding: "1rem 0",
-        color: "#fff",
-        backgroundColor: "#000",
-        textAlign: "center",
-        fontSize: "0.75rem"
-      }}
-    >
-      <a
-        href="https://github.com/michalszabo/lechanger"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        &copy;2022 Michal Szabo
-      </a>
-    </footer>
-  </div>
+      <TabPanels>
+        <TabPanel>
+          <p>Jedna!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Dva!</p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  </>
 );
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const availableCurrenciesJSON = await fetch(
+    `${process.env.API_URL}/currency/list`
+  );
+  const availableCurrencies = await availableCurrenciesJSON.json();
+
+  const statsJSON = await fetch(`${process.env.API_URL}/stats`);
+  const stats = await statsJSON.json();
+
+  const shortAvailableCurrencies: string[] = Array.from(
+    Object.keys(availableCurrencies.data)
+  );
+
+  const longAvailableCurrencies: string[] = Object.entries(
+    availableCurrencies.data
+  ).map(([key, value]) => `${key} - ${value}`);
+
+  const props: PageProps = {
+    availableCurrencies: {
+      short: shortAvailableCurrencies,
+      long: longAvailableCurrencies
+    },
+    stats: stats.data
+  };
+
+  return {
+    props
+  };
+};
 
 export default Home;

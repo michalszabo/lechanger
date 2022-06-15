@@ -1,10 +1,6 @@
 import { Schema, Document, model } from "mongoose";
 
 const ExchangeCurrencySchema = new Schema({
-  amount: {
-    type: Number,
-    required: true
-  },
   originalCurrency: {
     type: String,
     required: true
@@ -13,18 +9,29 @@ const ExchangeCurrencySchema = new Schema({
     type: String,
     requred: true
   },
+  originalAmount: {
+    type: Number,
+    required: true
+  },
+  convertedAmount: {
+    type: Number,
+    required: true
+  },
   usdAmount: {
     type: Number,
     required: true
   }
 });
 
-export interface IExchangeCurrency extends Document {
-  amount: number;
+export interface ExchangeCurrencyDataType {
   originalCurrency: string;
   destinationCurrency: string;
+  originalAmount: number;
+  convertedAmount: number;
   usdAmount: number;
 }
+
+export type IExchangeCurrency = ExchangeCurrencyDataType & Document;
 
 export default model<IExchangeCurrency>(
   "ExchangeCurrency",

@@ -2,7 +2,7 @@ import { ApiExchangeDataType } from "./backend/src/types";
 
 interface DefaultApiResponseType {
   success: boolean;
-  message?: string;
+  message?: string | null;
 }
 
 export interface ApiErrorItemType {
@@ -12,17 +12,32 @@ export interface ApiErrorItemType {
   location: string;
 }
 
-export interface ApiErrorType extends DefaultApiResponseType {
-  stack?: string;
-  errors?: ApiErrorItemType[];
+// Only important info for response
+interface DBErrorBodyType {
+  name: string;
+  message: string;
 }
 
-export interface ApiSuccessType<TData = unknown>
-  extends DefaultApiResponseType {
+export type ApiDBErrorType = Record<string, DBErrorBodyType>;
+
+export interface ApiErrorType extends DefaultApiResponseType {
+  stack?: string;
+  errors?: ApiErrorItemType[] | ApiDBErrorType;
+}
+
+export interface ApiSuccessType<TData = unknown> extends DefaultApiResponseType {
   data: TData;
 }
 
-export type ApiExchangeSuccessDataType = Pick<
-  ApiExchangeDataType,
-  "query" | "info" | "result"
->;
+export type ApiExchangeSuccessDataType = Pick<ApiExchangeDataType, "query" | "info" | "result">;
+
+export interface ApiTopDestinationCurrencyType {
+  _id: string;
+  count: number;
+}
+
+export interface ApiStatsDataType {
+  topDestinationCurrency: ApiTopDestinationCurrencyType;
+  totalAmountConvertedUSD: number;
+  conversionsLength: number;
+}

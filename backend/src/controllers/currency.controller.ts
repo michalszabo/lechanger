@@ -5,12 +5,15 @@ import axios from "axios";
 
 import type { Request, Response } from "express";
 import type {
+  ApiDBErrorType,
   ApiErrorItemType,
   ApiErrorType,
   ApiExchangeSuccessDataType,
   ApiSuccessType
 } from "@types";
 import type { ApiExchangeDataType } from "../types";
+
+import currencyService from "../services/currency.service";
 
 /**
  * Get list of available currencies
@@ -90,6 +93,10 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
       response.data as ApiExchangeDataType;
 
     if (!success) throw Error("Exchange failed on external API");
+    if (!result)
+      throw Error(
+        "Exchange failed on external API - check if valid currency were used"
+      );
 
     const responseData: ApiSuccessType<ApiExchangeSuccessDataType> = {
       success: true,
@@ -100,13 +107,22 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
       }
     };
 
-    // TODO Save data to DB
+    await currencyService.saveRecord({
+      destinationCurrency,
+      originalCurrency,
+      originalAmount: amount,
+      convertedAmount: result,
+      usdAmount
+    });
 
     res.status(200).json(responseData);
   } catch (error) {
     const errorResponse: ApiErrorType = {
       success: false,
-      message: error as string
+      message: typeof error === "object" ? (error as any).toString() : null,
+      errors:
+        ((error as { [key: string]: unknown })?.errors as ApiDBErrorType) ??
+        (error as ApiErrorItemType[])
     };
 
     res.status(500).json(errorResponse);

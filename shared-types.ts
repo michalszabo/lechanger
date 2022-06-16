@@ -1,6 +1,6 @@
 import { ApiExchangeDataType } from "./backend/src/types";
 
-interface DefaultApiResponseType {
+export interface DefaultApiResponseType {
   success: boolean;
   message?: string | null;
 }
@@ -18,11 +18,9 @@ interface DBErrorBodyType {
   message: string;
 }
 
-export type ApiDBErrorType = Record<string, DBErrorBodyType>;
-
 export interface ApiErrorType extends DefaultApiResponseType {
   stack?: string;
-  errors?: ApiErrorItemType[] | ApiDBErrorType;
+  errors?: ApiErrorItemType[];
 }
 
 export interface ApiSuccessType<TData = unknown> extends DefaultApiResponseType {

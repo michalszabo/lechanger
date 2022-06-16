@@ -1,12 +1,16 @@
-import type { Request, Response } from "express";
-import type { ApiErrorType, ApiSuccessType } from "@types";
+import type { Request, Response, NextFunction } from "express";
+import type { ApiSuccessType } from "@types";
 
 import statsService from "../services/stats.service";
 
 /**
  * Get exchange stats
  */
-const getStats = async (_req: Request, res: Response): Promise<void> => {
+const getStats = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const data = await statsService.getData();
 
@@ -17,12 +21,9 @@ const getStats = async (_req: Request, res: Response): Promise<void> => {
 
     res.status(200).json(responseData);
   } catch (error) {
-    const errorResponse: ApiErrorType = {
-      success: false,
-      message: "Error while reading stats"
-    };
+    (error as Error).message = "Error while reading stats";
 
-    res.status(500).json(errorResponse);
+    next(error);
   }
 };
 

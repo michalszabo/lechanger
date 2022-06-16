@@ -13,6 +13,7 @@ const errorHandler = (
   const errorMessage: ApiErrorType = {
     success: false,
     message: error.message,
+    errors: error.errors ?? [],
     stack: process.env.NODE_ENV === "production" ? "💔" : error.stack
   };
 

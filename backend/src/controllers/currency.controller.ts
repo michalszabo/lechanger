@@ -3,9 +3,8 @@ import fs from "fs";
 import { validationResult } from "express-validator";
 import axios from "axios";
 
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import type {
-  ApiDBErrorType,
   ApiErrorItemType,
   ApiErrorType,
   ApiExchangeSuccessDataType,
@@ -18,7 +17,7 @@ import currencyService from "../services/currency.service";
 /**
  * Get list of available currencies
  */
-const getList = (_req: Request, res: Response): void => {
+const getList = (_req: Request, res: Response, next: NextFunction): void => {
   try {
     const currenciesList = fs.readFileSync(
       path.join(__dirname, "..", "data", "currenciesList.json"),
@@ -33,19 +32,20 @@ const getList = (_req: Request, res: Response): void => {
 
     res.status(200).json(responseData);
   } catch (error) {
-    const errorResponse: ApiErrorType = {
-      success: false,
-      message: "Error while reading available currencies data"
-    };
+    (error as Error).message = "Error while reading available currencies data";
 
-    res.status(500).json(errorResponse);
+    next(error);
   }
 };
 
 /**
  * Exchange currencies
  */
-const exchange = async (req: Request, res: Response): Promise<void> => {
+const exchange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errResponse: ApiErrorType = {
@@ -53,7 +53,8 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
       errors: errors.array() as ApiErrorItemType[]
     };
 
-    res.status(400).json(errResponse);
+    res.status(400);
+    next(errResponse);
     return;
   }
 
@@ -79,8 +80,9 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
 
       const { success, result } = usdResponse.data as ApiExchangeDataType;
 
-      if (!success)
+      if (!success) {
         throw Error("Exchange to USD (stats) failed on external API");
+      }
 
       usdAmount = result;
     }
@@ -93,10 +95,11 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
       response.data as ApiExchangeDataType;
 
     if (!success) throw Error("Exchange failed on external API");
-    if (!result)
+    if (!result) {
       throw Error(
         "Exchange failed on external API - check if valid currency were used"
       );
+    }
 
     const responseData: ApiSuccessType<ApiExchangeSuccessDataType> = {
       success: true,
@@ -117,15 +120,7 @@ const exchange = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json(responseData);
   } catch (error) {
-    const errorResponse: ApiErrorType = {
-      success: false,
-      message: typeof error === "object" ? (error as any).toString() : null,
-      errors:
-        ((error as { [key: string]: unknown })?.errors as ApiDBErrorType) ??
-        (error as ApiErrorItemType[])
-    };
-
-    res.status(500).json(errorResponse);
+    next(error);
   }
 };
 

@@ -7,7 +7,7 @@ import slowDown from "express-slow-down";
 
 import type { Express } from "express";
 
-import { notFound, errorHandler } from "./handlers";
+import { notFound, errorHandler } from "./middlewares";
 import connectDb from "./services/db.service";
 import CurrencyRoute from "./routes/currency";
 import StatsRoute from "./routes/stats";

@@ -30,7 +30,7 @@ const Home: NextPage<PageProps> = ({ availableCurrencies, stats }) => (
       size="lg"
       borderRadius="1.25rem"
       overflow="hidden"
-      bgGradient="linear(to-br, purple.600, purple.700)"
+      bg="purple.700"
     >
       <TabList>
         <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
@@ -48,10 +48,10 @@ const Home: NextPage<PageProps> = ({ availableCurrencies, stats }) => (
       </TabList>
 
       <TabPanels>
-        <TabPanel>
+        <TabPanel pt={14} pb={10}>
           <ExchangeForm availableCurrencies={availableCurrencies} />
         </TabPanel>
-        <TabPanel>
+        <TabPanel pt={14} pb={10}>
           <ExchangeStats data={stats} />
         </TabPanel>
       </TabPanels>

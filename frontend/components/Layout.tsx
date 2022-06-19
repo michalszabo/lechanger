@@ -35,14 +35,14 @@ const Layout: FC<Props> = ({ children }) => (
       as="main"
       flex="1"
       w="full"
-      maxW="min(85vw, 800px)"
+      maxW="min(85vw, 1200px)"
       mx="auto"
       py={{ base: 5, md: 7 }}
     >
       {children}
     </Box>
 
-    <Box as="footer" color="white" w="full" textAlign="center">
+    <Box as="footer" color="white" w="full" textAlign="center" py={5}>
       <a
         href="https://github.com/michalszabo/lechanger"
         target="_blank"

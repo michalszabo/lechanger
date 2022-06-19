@@ -20,7 +20,7 @@ const isFormFieldInvalid = ({
 
   if (hasFormikError) return true;
 
-  const hasHookError = hookErrors?.find(({ value: key }) => key === fieldName);
+  const hasHookError = hookErrors?.find(({ param }) => param === fieldName);
 
   if (hasHookError) return true;
 

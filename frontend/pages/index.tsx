@@ -1,11 +1,14 @@
-import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import { Box, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 import { GiReceiveMoney } from "@react-icons/all-files/gi/GiReceiveMoney";
 import { IoMdStats } from "@react-icons/all-files/io/IoMdStats";
 
+import type { NextPage, GetServerSideProps } from "next";
 import type { CSSObject } from "@chakra-ui/react";
-import type { ApiStatsDataType } from "@types";
+import type { ApiStatsDataType } from "@shared-types";
+import type { AvailableCurrenciesType } from "@/types";
+
+import { ExchangeForm, ExchangeStats } from "@/components";
 
 const tabSelectedStyle: CSSObject = {
   color: "white",
@@ -13,14 +16,11 @@ const tabSelectedStyle: CSSObject = {
 };
 
 interface PageProps {
-  availableCurrencies: {
-    short: string[];
-    long: string[];
-  };
+  availableCurrencies: AvailableCurrenciesType;
   stats: ApiStatsDataType;
 }
 
-const Home: NextPage<PageProps> = () => (
+const Home: NextPage<PageProps> = ({ availableCurrencies, stats }) => (
   <>
     <Head>{/* <link rel="icon" href="/favicon.ico" /> */}</Head>
 
@@ -49,10 +49,10 @@ const Home: NextPage<PageProps> = () => (
 
       <TabPanels>
         <TabPanel>
-          <p>Jedna!</p>
+          <ExchangeForm availableCurrencies={availableCurrencies} />
         </TabPanel>
         <TabPanel>
-          <p>Dva!</p>
+          <ExchangeStats data={stats} />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -61,11 +61,11 @@ const Home: NextPage<PageProps> = () => (
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const availableCurrenciesJSON = await fetch(
-    `${process.env.API_URL}/currency/list`
+    `${process.env.NEXT_PUBLIC_API_URL}/currency/list`
   );
   const availableCurrencies = await availableCurrenciesJSON.json();
 
-  const statsJSON = await fetch(`${process.env.API_URL}/stats`);
+  const statsJSON = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats`);
   const stats = await statsJSON.json();
 
   const shortAvailableCurrencies: string[] = Array.from(

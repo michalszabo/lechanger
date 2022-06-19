@@ -1,5 +1,11 @@
 {
   "extends": ["airbnb", "next", "prettier"],
+  "settings": {
+    // to support @/ path
+    "import/resolver": {
+      "typescript": {} // this loads <rootdir>/tsconfig.json to eslint
+    }
+  },
   "rules": {
     "import/extensions": [
       "error",

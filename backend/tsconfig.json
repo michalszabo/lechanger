@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "paths": { "@types": ["../shared-types.ts"] },
+    "paths": { "@shared-types": ["../shared-types.ts"] },
     "target": "es5",
     "module": "commonjs",
     "lib": ["es6"],

@@ -9,7 +9,7 @@ import type {
   ApiErrorType,
   ApiExchangeSuccessDataType,
   ApiSuccessType
-} from "@types";
+} from "@shared-types";
 import type { ApiExchangeDataType } from "../types";
 
 import currencyService from "../services/currency.service";

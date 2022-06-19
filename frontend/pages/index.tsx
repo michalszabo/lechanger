@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Box, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
 import { GiReceiveMoney } from "@react-icons/all-files/gi/GiReceiveMoney";
 import { IoMdStats } from "@react-icons/all-files/io/IoMdStats";
@@ -21,42 +20,38 @@ interface PageProps {
 }
 
 const Home: NextPage<PageProps> = ({ availableCurrencies, stats }) => (
-  <>
-    <Head>{/* <link rel="icon" href="/favicon.ico" /> */}</Head>
+  <Tabs
+    isFitted
+    variant="unstyled"
+    size="lg"
+    borderRadius="1.25rem"
+    overflow="hidden"
+    bg="purple.700"
+  >
+    <TabList>
+      <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
+        <GiReceiveMoney />
+        <Box as="span" ml={2}>
+          Convert
+        </Box>
+      </Tab>
+      <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
+        <IoMdStats />
+        <Box as="span" ml={2}>
+          Stats
+        </Box>
+      </Tab>
+    </TabList>
 
-    <Tabs
-      isFitted
-      variant="unstyled"
-      size="lg"
-      borderRadius="1.25rem"
-      overflow="hidden"
-      bg="purple.700"
-    >
-      <TabList>
-        <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
-          <GiReceiveMoney />
-          <Box as="span" ml={2}>
-            Convert
-          </Box>
-        </Tab>
-        <Tab bg="purple.200" color="dark" _selected={tabSelectedStyle}>
-          <IoMdStats />
-          <Box as="span" ml={2}>
-            Stats
-          </Box>
-        </Tab>
-      </TabList>
-
-      <TabPanels>
-        <TabPanel pt={14} pb={10}>
-          <ExchangeForm availableCurrencies={availableCurrencies} />
-        </TabPanel>
-        <TabPanel pt={14} pb={10}>
-          <ExchangeStats data={stats} />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  </>
+    <TabPanels>
+      <TabPanel pt={14} pb={10}>
+        <ExchangeForm availableCurrencies={availableCurrencies} />
+      </TabPanel>
+      <TabPanel pt={14} pb={10}>
+        <ExchangeStats data={stats} />
+      </TabPanel>
+    </TabPanels>
+  </Tabs>
 );
 
 export const getServerSideProps: GetServerSideProps = async () => {

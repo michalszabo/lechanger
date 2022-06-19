@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useToast } from "@chakra-ui/react";
 
 import type {
   ApiExchangeSuccessDataType,
@@ -20,6 +21,8 @@ interface Output {
 }
 
 const useExchangeCurrency = (): Output => {
+  const toast = useToast();
+
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ApiExchangeSuccessDataType | null>(null);
   const [error, setError] = useState<ApiErrorType | null>(null);
@@ -32,6 +35,14 @@ const useExchangeCurrency = (): Output => {
   };
 
   const handleError = (errorResponse: ApiErrorType): void => {
+    toast({
+      title: "Error",
+      description: errorResponse.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true
+    });
+
     setError(errorResponse);
 
     setIsLoading(false);

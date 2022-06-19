@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 import type { ApiErrorType, DefaultApiResponseType } from "@shared-types";
 
 type Settings = {
@@ -17,8 +15,7 @@ const fetchJSON = async <T extends DefaultApiResponseType>(
   headers: HeadersInit = {
     Accept: "application/json",
     "Content-Type": "application/json"
-  },
-  withToastError = false
+  }
 ): Promise<T | ApiErrorType> => {
   // eslint-disable-next-line no-undef
   const config: RequestInit = {
@@ -42,10 +39,6 @@ const fetchJSON = async <T extends DefaultApiResponseType>(
   } catch (error) {
     const errorMsg =
       (error as Error).message ?? "Something went terribly wrong :(";
-
-    if (withToastError) {
-      toast(errorMsg, { autoClose: 5000 });
-    }
 
     const resError: ApiErrorType = {
       ...(error as Error),

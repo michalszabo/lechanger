@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ApiErrorType } from "@types";
+import type { ApiErrorType } from "@shared-types";
 
 const errorHandler = (
   error: any,

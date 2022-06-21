@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ApiSuccessType } from "@types";
+import type { ApiSuccessType } from "@shared-types";
 
 import statsService from "../services/stats.service";
 

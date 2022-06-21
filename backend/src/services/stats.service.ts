@@ -1,4 +1,7 @@
-import type { ApiStatsDataType, ApiTopDestinationCurrencyType } from "@types";
+import type {
+  ApiStatsDataType,
+  ApiTopDestinationCurrencyType
+} from "@shared-types";
 
 import ExchangeCurrency from "../models/exchangeCurrency.model";
 

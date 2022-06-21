@@ -1,1 +1,1 @@
-export { default as isFormFieldInvalid } from "./isFormFieldInvalid";
+export { default as getFieldError } from "./getFieldError";

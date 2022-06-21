@@ -25,7 +25,7 @@ const Result: FC<Props> = ({ data }) => {
       <Box mb={2} fontSize="md">
         <Box as="span">Rate: </Box>
         <Box as="span">
-          1 {query.to} = {info.rate} {query.from}
+          1 {query.from} = {info.rate} {query.to}
         </Box>
       </Box>
     </Box>

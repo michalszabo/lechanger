@@ -1,4 +1,5 @@
-import { Formik, ErrorMessage as FormikErrorMessage } from "formik";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import {
   Box,
   Flex,
@@ -6,7 +7,7 @@ import {
   Select,
   FormControl,
   FormLabel,
-  FormErrorMessage as ChakraErrorMessage,
+  FormErrorMessage,
   Button
 } from "@chakra-ui/react";
 
@@ -16,8 +17,20 @@ import type { AvailableCurrenciesType } from "@/types";
 import type { FormFieldsType } from "./types";
 
 import { useExchangeCurrency } from "./hooks";
-import { isFormFieldInvalid } from "./utilities";
+import { getFieldError } from "./utilities";
 import { Result } from "./components";
+
+const exchangeFormSchema = Yup.object().shape({
+  amount: Yup.number()
+    .test("'amount muset be greater than 0'", (value) => !!value && value > 0)
+    .required("'amount' is required"),
+  originalCurrency: Yup.string().required(
+    "Pick original currency for exchange"
+  ),
+  destinationCurrency: Yup.string().required(
+    "Pick destination currency for exchange"
+  )
+});
 
 interface Props {
   availableCurrencies: AvailableCurrenciesType;
@@ -47,6 +60,7 @@ const ExchangeForm: FC<Props> = ({ availableCurrencies }) => {
             } as FormFieldsType
           }
           onSubmit={handleSubmit}
+          validationSchema={exchangeFormSchema}
         >
           {(formikProps) => (
             <form autoComplete="off" onSubmit={formikProps.handleSubmit}>
@@ -55,7 +69,18 @@ const ExchangeForm: FC<Props> = ({ availableCurrencies }) => {
                 gap={{ base: 10, xl: 5 }}
                 mb={10}
               >
-                <FormControl variant="floating" id="amount" isRequired>
+                <FormControl
+                  variant="floating"
+                  id="amount"
+                  isRequired
+                  isInvalid={
+                    !!getFieldError({
+                      fieldName: "amount",
+                      formikErrors: formikProps.errors,
+                      hookErrors: hookError?.errors as ApiErrorItemType[]
+                    })
+                  }
+                >
                   <Input
                     _focusVisible={{
                       borderColor: "pink.500",
@@ -67,22 +92,20 @@ const ExchangeForm: FC<Props> = ({ availableCurrencies }) => {
                     isDisabled={isLoading}
                     isRequired
                     onChange={formikProps.handleChange}
-                    isInvalid={isFormFieldInvalid({
-                      fieldName: "amount",
-                      formikErrors: formikProps.errors,
-                      hookErrors: hookError?.errors as ApiErrorItemType[]
-                    })}
                     type="number"
                     min={1}
                     size="lg"
                   />
+
                   <FormLabel>Amount</FormLabel>
 
-                  <FormikErrorMessage name="amount">
-                    {(message) => (
-                      <ChakraErrorMessage>{message}</ChakraErrorMessage>
-                    )}
-                  </FormikErrorMessage>
+                  <FormErrorMessage color="pink.100" fontSize="md">
+                    {getFieldError({
+                      fieldName: "amount",
+                      formikErrors: formikProps.errors,
+                      hookErrors: hookError?.errors as ApiErrorItemType[]
+                    })}
+                  </FormErrorMessage>
                 </FormControl>
 
                 {[
@@ -94,17 +117,19 @@ const ExchangeForm: FC<Props> = ({ availableCurrencies }) => {
                     variant="floating"
                     id={name}
                     isRequired
+                    isInvalid={
+                      !!getFieldError({
+                        fieldName: name,
+                        formikErrors: formikProps.errors,
+                        hookErrors: hookError?.errors as ApiErrorItemType[]
+                      })
+                    }
                   >
                     <Select
                       name={name}
                       value={formikProps.values[name as keyof FormFieldsType]}
                       onChange={formikProps.handleChange}
                       isDisabled={isLoading}
-                      isInvalid={isFormFieldInvalid({
-                        fieldName: name,
-                        formikErrors: formikProps.errors,
-                        hookErrors: hookError?.errors as ApiErrorItemType[]
-                      })}
                       size="lg"
                       _focusVisible={{
                         borderColor: "pink.500",
@@ -120,11 +145,13 @@ const ExchangeForm: FC<Props> = ({ availableCurrencies }) => {
 
                     <FormLabel>{label}</FormLabel>
 
-                    <FormikErrorMessage name={name}>
-                      {(message) => (
-                        <ChakraErrorMessage>{message}</ChakraErrorMessage>
-                      )}
-                    </FormikErrorMessage>
+                    <FormErrorMessage color="pink.100" fontSize="md">
+                      {getFieldError({
+                        fieldName: name,
+                        formikErrors: formikProps.errors,
+                        hookErrors: hookError?.errors as ApiErrorItemType[]
+                      })}
+                    </FormErrorMessage>
                   </FormControl>
                 ))}
               </Flex>
